@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Stage1MovieApp</string>
+
+    <!-- MainDiscoveryActivity labels -->
+    <string name="loading_movies_text">Loading movies…</string>
+    <string name="no_movies_found">"No movies found!"</string>
+    <string name="error_while_retrieving_data">Error while fetching data</string>
+
+    <!-- menu sort item labels -->
+    <string name="rating_menu_item_text">Sort by rating</string>
+    <string name="popular_menu_item_text">Sort by popularity</string>
+
+    <!-- DetailActivity labels -->
+    <string name="movie_title_label">Title: %s</string>
+    <string name="movie_releaseDate_label">Release date: %s</string>
+    <string name="movie_vote_average_label">Average score: %s</string>
+    <string name="movie_plot_synopsis">Plot synopsis:</string>
+</resources>
