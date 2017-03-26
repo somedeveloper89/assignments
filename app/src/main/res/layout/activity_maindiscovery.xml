@@ -16,14 +16,14 @@
     <ProgressBar
         android:id="@+id/movies_loading_progress"
         android:visibility="invisible"
-        android:layout_height="42dp"
-        android:layout_width="42dp"
+        android:layout_height="@dimen/progress_bar_height_width"
+        android:layout_width="@dimen/progress_bar_height_width"
         android:layout_gravity="center"/>
 
     <TextView
         android:id="@+id/movies_loading_textview"
         android:visibility="invisible"
-        android:textSize="20sp"
+        android:textSize="@dimen/default_text_size"
         android:layout_gravity="center"
         android:text="@string/loading_movies_text"
         android:layout_width="wrap_content"
