@@ -13,7 +13,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ListView;
+import android.widget.GridView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -43,11 +43,11 @@ public class MainDiscoveryActivity extends AppCompatActivity implements MoviesAd
         mProgressBar = (ProgressBar) findViewById(R.id.movies_loading_progress);
         mMessage = (TextView) findViewById(R.id.movies_loading_textview);
 
-        ListView listView = (ListView) findViewById(R.id.movies_listview);
+        GridView gridView = (GridView) findViewById(R.id.movies_gridview);
         mMovieList = new ArrayList<>();
 
         mMoviesAdapter = new MoviesAdapter(this, mMovieList);
-        listView.setAdapter(mMoviesAdapter);
+        gridView.setAdapter(mMoviesAdapter);
         mMoviesAdapter.setmClickHandler(this);
 
         // set default query

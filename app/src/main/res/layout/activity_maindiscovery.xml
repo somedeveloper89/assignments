@@ -1,17 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context="com.myown.project.stage1movieapp.MainDiscoveryActivity">
 
-    <ListView
-        android:id="@+id/movies_listview"
+    <GridView
+        android:id="@+id/movies_gridview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="match_parent"
+        android:columnWidth="@dimen/gridview_column_width"
+        android:numColumns="auto_fit"
+        android:padding="@dimen/default_padding"
+        android:verticalSpacing="@dimen/gridview_spacing"
+        android:horizontalSpacing="@dimen/gridview_spacing"
+        android:stretchMode="columnWidth"
+        android:gravity="center"
+        />
 
     <ProgressBar
         android:id="@+id/movies_loading_progress"
@@ -29,4 +36,4 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
-</LinearLayout>
+</RelativeLayout>

@@ -23,7 +23,7 @@ public class NetworkUtils {
     static final String POPULAR = "popular";
     static final String RATING = "top_rated";
     private static final String MOVIE_DB_IMAGE_BASE_URL = "http://image.tmdb.org/t/p/";
-    private static final String RECOMMENDED_IMAGE_SIZE = "w342";
+    private static final String RECOMMENDED_IMAGE_SIZE = "w185";
 
     private static final int DEFAULT_CONNECTION_TIMEOUT = 60 * 5;
 

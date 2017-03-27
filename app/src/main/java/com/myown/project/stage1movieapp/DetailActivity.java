@@ -59,6 +59,6 @@ public class DetailActivity extends AppCompatActivity {
         plotText.setText(mPlotSynopsis);
 
         Uri uri = NetworkUtils.relativeToAbsoluteImageUrl(mPosterPath);
-        Picasso.with(this).load(uri).into(imageView);
+        Picasso.with(this).load(uri).resize(R.integer.image_width, R.integer.image_height).into(imageView);
     }
 }
