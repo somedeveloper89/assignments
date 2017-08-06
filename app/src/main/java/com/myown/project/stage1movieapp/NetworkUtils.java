@@ -10,6 +10,7 @@ import android.util.Log;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -29,8 +30,10 @@ public class NetworkUtils {
     static final String RATING = "top_rated";
     private static final String MOVIE_DB_IMAGE_BASE_URL = "http://image.tmdb.org/t/p/";
     private static final String RECOMMENDED_IMAGE_SIZE = "w185";
+    private static final String VIDEOS = "videos";
+    private static final String REVIEWS = "reviews";
 
-    private static final int DEFAULT_CONNECTION_TIMEOUT = 60 * 5;
+    private static final int CONNECTION_TIMEOUT_IN_SECONDS = 15;
 
     /**
      * Build the URL to talk to the movie database.
@@ -41,18 +44,17 @@ public class NetworkUtils {
     public static URL buildMovieDBUrl(String query) {
         Uri uri = Uri.parse(MOVIE_DB_BASE_URL).buildUpon().appendPath(query.equals(POPULAR) ? POPULAR : RATING)
                 .appendQueryParameter(API_KEY, MY_API_KEY).build();
+        return convertUriToURL(uri);
+    }
 
+    private static URL convertUriToURL(Uri uri) {
         URL url;
-
         try {
             url = new URL(uri.toString());
         } catch (MalformedURLException e) {
             // this shouldn't happen
             throw new RuntimeException(e);
         }
-
-        Log.d(TAG, url.toString());
-
         return url;
     }
 
@@ -64,7 +66,11 @@ public class NetworkUtils {
      * @throws IOException Related to network and stream reading
      */
     public static String post(URL url, String json) throws IOException {
-        OkHttpClient okHttpClient = new OkHttpClient();
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .connectTimeout(CONNECTION_TIMEOUT_IN_SECONDS, TimeUnit.SECONDS)
+                .build();
+
+        Log.d(TAG, "Posting to: " + url.toString());
 
         RequestBody body = RequestBody.create(JSON, json);
         Request request = new Request.Builder()
@@ -84,5 +90,29 @@ public class NetworkUtils {
     public static Uri relativeToAbsoluteImageUrl(String posterRelativePath) {
         return Uri.parse(MOVIE_DB_IMAGE_BASE_URL).buildUpon().appendPath(RECOMMENDED_IMAGE_SIZE)
                 .appendEncodedPath(posterRelativePath).build();
+    }
+
+    /**
+     * Build the URL to get the video's for a movie.
+     *
+     * @param movieId the unique id of the movie.
+     * @return URL object for the request.
+     */
+    public static URL buildUrlForMovieVideo(int movieId) {
+        Uri uri = Uri.parse(MOVIE_DB_BASE_URL).buildUpon().appendPath(String.valueOf(movieId))
+                .appendPath(VIDEOS).build();
+        return convertUriToURL(uri);
+    }
+
+    /**
+     * Build the URL to get the reviews for a movie.
+     *
+     * @param movieId the unique id of the movie.
+     * @return URL object for the request.
+     */
+    public static URL buildUrlForMovieReviews(int movieId) {
+        Uri uri = Uri.parse(MOVIE_DB_BASE_URL).buildUpon().appendPath(String.valueOf(movieId))
+                .appendPath(REVIEWS).build();
+        return convertUriToURL(uri);
     }
 }
