@@ -18,7 +18,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -110,14 +112,17 @@ public class MainDiscoveryActivity extends AppCompatActivity {
         protected List<Movie> doInBackground(String... params) {
             URL requestUrl = NetworkUtils.buildMovieDBUrl(params[0]);
             try {
-                String jsonMovies = NetworkUtils.doRequest(requestUrl);
+                JSONObject emptyJson = new JSONObject();
+                String jsonMovies = NetworkUtils.post(requestUrl, emptyJson.toString());
 
                 if (jsonMovies != null) {
                     return JsonUtil.getMoviesListByJsonData(jsonMovies);
                 }
+            } catch (IOException e) {
+                Log.w(TAG, "Service request failed: " + e.getMessage());
             } catch (JSONException e) {
                 // Probably bad json string allow retry
-                Log.w(TAG, "Parsing json string failed");
+                Log.w(TAG, "Parsing json string failed: " + e.getMessage());
             }
             return null;
         }

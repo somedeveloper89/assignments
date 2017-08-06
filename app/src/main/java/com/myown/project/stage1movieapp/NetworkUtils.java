@@ -8,15 +8,20 @@ import android.net.Uri;
 import android.util.Log;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Scanner;
+
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class NetworkUtils {
     private static final String TAG = NetworkUtils.class.getSimpleName();
 
+    private static final MediaType JSON
+            = MediaType.parse("application/json; charset=utf-8");
     private static final String MOVIE_DB_BASE_URL = "https://api.themoviedb.org/3/movie/";
     private static final String API_KEY = "api_key";
     private static final String MY_API_KEY = "ADD-YOUR-API-KEY-HERE";
@@ -58,30 +63,16 @@ public class NetworkUtils {
      * @return The contents of the HTTP response.
      * @throws IOException Related to network and stream reading
      */
-    public static String doRequest(URL url) {
-        HttpURLConnection connection = null;
+    public static String post(URL url, String json) throws IOException {
+        OkHttpClient okHttpClient = new OkHttpClient();
 
-        try {
-            connection = (HttpURLConnection) url.openConnection();
-            connection.setConnectTimeout(DEFAULT_CONNECTION_TIMEOUT);
-            int responseCode = connection.getResponseCode();
-
-            if (responseCode == 200) {
-                InputStream inputStream = connection.getInputStream();
-
-                Scanner scanner = new Scanner(inputStream);
-                scanner.useDelimiter("\\A");
-
-                return scanner.hasNext() ? scanner.next() : null;
-            }
-        } catch (IOException e) {
-            // failed so just return null so we can retry
-            Log.w(TAG, e.getMessage(), e);
-        } finally {
-            connection.disconnect();
-        }
-
-        return null;
+        RequestBody body = RequestBody.create(JSON, json);
+        Request request = new Request.Builder()
+                .url(url)
+                .post(body)
+                .build();
+        Response response = okHttpClient.newCall(request).execute();
+        return response.body().string();
     }
 
     /**
