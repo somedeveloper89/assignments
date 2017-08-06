@@ -23,14 +23,22 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * This activity shows a grid view with movies and gives the user the ability to order by popularity or rating.
  */
 public class MainDiscoveryActivity extends AppCompatActivity {
     private static final String TAG = MainDiscoveryActivity.class.getSimpleName();
 
-    private ProgressBar mProgressBar;
-    private TextView mMessage;
+    @BindView(R.id.movies_loading_progress)
+    ProgressBar mProgressBar;
+    @BindView(R.id.movies_loading_textview)
+    TextView mMessage;
+    @BindView(R.id.recyclerview)
+    RecyclerView mRecyclerView;
+
     private MoviesRecyclerViewAdapter mMoviesAdapter;
     private List<Movie> mMovieList;
     private String mSortType;
@@ -39,17 +47,14 @@ public class MainDiscoveryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maindiscovery);
-
-        mProgressBar = (ProgressBar) findViewById(R.id.movies_loading_progress);
-        mMessage = (TextView) findViewById(R.id.movies_loading_textview);
+        ButterKnife.bind(this);
 
         mMovieList = new ArrayList<>();
 
-        RecyclerView rv = (RecyclerView) findViewById(R.id.recyclerview);
-        rv.setHasFixedSize(true);
-        rv.setLayoutManager(new GridLayoutManager(this, 2));
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         mMoviesAdapter = new MoviesRecyclerViewAdapter(mMovieList);
-        rv.setAdapter(mMoviesAdapter);
+        mRecyclerView.setAdapter(mMoviesAdapter);
 
         // set default query
         mSortType = NetworkUtils.POPULAR;

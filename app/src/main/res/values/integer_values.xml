@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Image values -->
-    <integer name="image_width">350</integer>
-    <integer name="image_height">350</integer>
+    <integer name="image_width">700</integer>
+    <integer name="image_height">900</integer>
 </resources>

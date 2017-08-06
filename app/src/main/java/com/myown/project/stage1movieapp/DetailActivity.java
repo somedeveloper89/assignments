@@ -13,22 +13,31 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * This activity shows the details of a selected movie.
  */
 public class DetailActivity extends AppCompatActivity {
     public static final String MOVIE_EXTRA = "MOVIE_EXTRA";
 
-    private String mTitle;
-    private String mReleaseDate;
-    private String mPosterPath;
-    private String mPlotSynopsis;
-    private String mVoteAverage;
+    @BindView(R.id.detailscreen_movie_poster)
+    ImageView mImageView;
+    @BindView(R.id.detailscreen_title)
+    TextView mTitle;
+    @BindView(R.id.detailscreen_release_date)
+    TextView mRelease;
+    @BindView(R.id.detailscreen_vote_average)
+    TextView mVote;
+    @BindView(R.id.detailscreen_plot_synopsis)
+    TextView mPlot;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+        ButterKnife.bind(this);
 
         if (getActionBar() != null) {
             getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -39,26 +48,18 @@ public class DetailActivity extends AppCompatActivity {
         if (intent.hasExtra(MOVIE_EXTRA)) {
 
             Movie movie = intent.getParcelableExtra(MOVIE_EXTRA);
-
-            mTitle = movie.title;
-            mReleaseDate = movie.releaseDate;
-            mPosterPath = movie.posterRelativePath;
-            mPlotSynopsis = movie.overview;
-            mVoteAverage = String.valueOf(movie.voteAverage);
+            fillMovieDetails(movie);
         }
+    }
 
-        ImageView imageView = (ImageView) findViewById(R.id.detailscreen_movie_poster);
-        TextView titleText = (TextView) findViewById(R.id.detailscreen_title);
-        TextView releaseText = (TextView) findViewById(R.id.detailscreen_release_date);
-        TextView voteText = (TextView) findViewById(R.id.detailscreen_vote_average);
-        TextView plotText = (TextView) findViewById(R.id.detailscreen_plot_synopsis);
+    private void fillMovieDetails(Movie movie) {
+        mTitle.setText(getString(R.string.movie_title_label, movie.title));
+        mRelease.setText(getString(R.string.movie_releaseDate_label, movie.releaseDate));
+        mVote.setText(getString(R.string.movie_vote_average_label, String.valueOf(movie.voteAverage)));
+        mPlot.setText(movie.overview);
 
-        titleText.setText(getString(R.string.movie_title_label, mTitle));
-        releaseText.setText(getString(R.string.movie_releaseDate_label, mReleaseDate));
-        voteText.setText(getString(R.string.movie_vote_average_label, mVoteAverage));
-        plotText.setText(mPlotSynopsis);
-
-        Uri uri = NetworkUtils.relativeToAbsoluteImageUrl(mPosterPath);
-        Picasso.with(this).load(uri).resize(R.integer.image_width, R.integer.image_height).into(imageView);
+        Uri uri = NetworkUtils.relativeToAbsoluteImageUrl(movie.posterRelativePath);
+        Picasso.with(this).load(uri).resize(this.getResources().getInteger(R.integer.image_width),
+                this.getResources().getInteger(R.integer.image_height)).into(mImageView);
     }
 }

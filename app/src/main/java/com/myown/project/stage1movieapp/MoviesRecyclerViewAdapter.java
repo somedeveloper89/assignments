@@ -17,6 +17,9 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Supplies movie data to the view.
  */
@@ -43,8 +46,10 @@ class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecyclerViewA
     public void onBindViewHolder(ViewHolder holder, int position) {
         final Movie movie = mMovies.get(position);
 
+        Context context = holder.mImageView.getContext();
         Uri uri = NetworkUtils.relativeToAbsoluteImageUrl(movie.posterRelativePath);
-        Picasso.with(holder.mImageView.getContext()).load(uri).resize(700, 900).into(holder.mImageView);
+        Picasso.with(context).load(uri).resize(context.getResources().getInteger(R.integer.image_width),
+                context.getResources().getInteger(R.integer.image_height)).into(holder.mImageView);
 
         holder.mImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,11 +76,12 @@ class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecyclerViewA
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        final ImageView mImageView;
+        @BindView(R.id.movie_image)
+        ImageView mImageView;
 
         ViewHolder(View view) {
             super(view);
-            mImageView = (ImageView) view.findViewById(R.id.movie_image);
+            ButterKnife.bind(this, view);
         }
     }
 }
