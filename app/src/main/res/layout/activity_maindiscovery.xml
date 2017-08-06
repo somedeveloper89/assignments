@@ -7,18 +7,10 @@
     android:layout_height="match_parent"
     tools:context="com.myown.project.stage1movieapp.MainDiscoveryActivity">
 
-    <GridView
-        android:id="@+id/movies_gridview"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:columnWidth="@dimen/gridview_column_width"
-        android:numColumns="auto_fit"
-        android:padding="@dimen/default_padding"
-        android:verticalSpacing="@dimen/gridview_spacing"
-        android:horizontalSpacing="@dimen/gridview_spacing"
-        android:stretchMode="columnWidth"
-        android:gravity="center"
-        />
+        android:layout_height="match_parent"/>
 
     <ProgressBar
         android:id="@+id/movies_loading_progress"

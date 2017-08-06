@@ -4,16 +4,16 @@
 
 package com.myown.project.stage1movieapp;
 
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.GridView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -26,12 +26,12 @@ import java.util.List;
 /**
  * This activity shows a grid view with movies and gives the user the ability to order by popularity or rating.
  */
-public class MainDiscoveryActivity extends AppCompatActivity implements MoviesAdapter.MoviesAdapterOnClickHandler {
+public class MainDiscoveryActivity extends AppCompatActivity {
     private static final String TAG = MainDiscoveryActivity.class.getSimpleName();
 
     private ProgressBar mProgressBar;
     private TextView mMessage;
-    private MoviesAdapter mMoviesAdapter;
+    private MoviesRecyclerViewAdapter mMoviesAdapter;
     private List<Movie> mMovieList;
     private String mSortType;
 
@@ -43,12 +43,13 @@ public class MainDiscoveryActivity extends AppCompatActivity implements MoviesAd
         mProgressBar = (ProgressBar) findViewById(R.id.movies_loading_progress);
         mMessage = (TextView) findViewById(R.id.movies_loading_textview);
 
-        GridView gridView = (GridView) findViewById(R.id.movies_gridview);
         mMovieList = new ArrayList<>();
 
-        mMoviesAdapter = new MoviesAdapter(this, mMovieList);
-        gridView.setAdapter(mMoviesAdapter);
-        mMoviesAdapter.setmClickHandler(this);
+        RecyclerView rv = (RecyclerView) findViewById(R.id.recyclerview);
+        rv.setHasFixedSize(true);
+        rv.setLayoutManager(new GridLayoutManager(this, 2));
+        mMoviesAdapter = new MoviesRecyclerViewAdapter(mMovieList);
+        rv.setAdapter(mMoviesAdapter);
 
         // set default query
         mSortType = NetworkUtils.POPULAR;
@@ -90,18 +91,10 @@ public class MainDiscoveryActivity extends AppCompatActivity implements MoviesAd
         new FetchMoviesTask().execute(mSortType);
     }
 
-    @Override
-    public void onMovieClicked(Movie movie) {
-        Intent intent = new Intent(this, DetailActivity.class);
-        intent.putExtra(DetailActivity.MOVIE_EXTRA, movie);
-
-        startActivity(intent);
-    }
-
-    class FetchMoviesTask extends AsyncTask<String, Void, List<Movie>> {
+    private class FetchMoviesTask extends AsyncTask<String, Void, List<Movie>> {
         @Override
         protected void onPreExecute() {
-            mMoviesAdapter.clear();
+            mMoviesAdapter.clearMovies();
             mMoviesAdapter.notifyDataSetChanged();
             mProgressBar.setVisibility(View.VISIBLE);
             mMessage.setText(R.string.loading_movies_text);
@@ -115,8 +108,7 @@ public class MainDiscoveryActivity extends AppCompatActivity implements MoviesAd
                 String jsonMovies = NetworkUtils.doRequest(requestUrl);
 
                 if (jsonMovies != null) {
-                    List<Movie> movies = JsonUtil.getMoviesListByJsonData(jsonMovies);
-                    return movies;
+                    return JsonUtil.getMoviesListByJsonData(jsonMovies);
                 }
             } catch (JSONException e) {
                 // Probably bad json string allow retry
