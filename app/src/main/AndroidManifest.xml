@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainDiscoveryActivity"
+            android:name=".activity.MainDiscoveryActivity"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -20,12 +20,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".DetailActivity"
-            android:parentActivityName=".MainDiscoveryActivity">
+            android:name=".activity.DetailActivity"
+            android:parentActivityName=".activity.MainDiscoveryActivity">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainDiscoveryActivity"/>
+                android:value=".activity.MainDiscoveryActivity"/>
 
         </activity>
     </application>

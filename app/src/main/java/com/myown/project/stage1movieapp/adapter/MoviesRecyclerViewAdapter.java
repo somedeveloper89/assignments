@@ -2,7 +2,7 @@
  * Copyright (C) 2017 Mustafa Kabaktepe
  */
 
-package com.myown.project.stage1movieapp;
+package com.myown.project.stage1movieapp.adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +13,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.myown.project.stage1movieapp.R;
+import com.myown.project.stage1movieapp.activity.DetailActivity;
+import com.myown.project.stage1movieapp.model.Movie;
+import com.myown.project.stage1movieapp.util.NetworkUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -23,7 +27,7 @@ import butterknife.ButterKnife;
 /**
  * Supplies movie data to the view.
  */
-class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecyclerViewAdapter.ViewHolder> {
+public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecyclerViewAdapter.ViewHolder> {
     private List<Movie> mMovies;
 
     /**
@@ -31,7 +35,7 @@ class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecyclerViewA
      *
      * @param movies list of movies.
      */
-    MoviesRecyclerViewAdapter(List<Movie> movies) {
+    public MoviesRecyclerViewAdapter(List<Movie> movies) {
         mMovies = movies;
     }
 
@@ -47,7 +51,7 @@ class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecyclerViewA
         final Movie movie = mMovies.get(position);
 
         Context context = holder.mImageView.getContext();
-        Uri uri = NetworkUtils.relativeToAbsoluteImageUrl(movie.posterRelativePath);
+        Uri uri = NetworkUtils.relativeToAbsoluteImageUrl(movie.getPosterRelativePath());
         Picasso.with(context).load(uri).resize(context.getResources().getInteger(R.integer.image_width),
                 context.getResources().getInteger(R.integer.image_height)).into(holder.mImageView);
 
@@ -64,15 +68,27 @@ class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecyclerViewA
 
     @Override
     public int getItemCount() {
-        return mMovies.size();
+        return mMovies != null ? mMovies.size() : 0;
     }
 
-    void clearMovies() {
-        mMovies.clear();
+    /**
+     * Clear the list of movies.
+     */
+    public void clearMovies() {
+        if (mMovies != null) {
+            mMovies.clear();
+            notifyDataSetChanged();
+        }
     }
 
-    void addAll(List<Movie> movies) {
+    /**
+     * Load the movies list.
+     *
+     * @param movies list of movies.
+     */
+    public void addAll(List<Movie> movies) {
         mMovies = movies;
+        notifyDataSetChanged();
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {

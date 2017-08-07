@@ -2,7 +2,7 @@
  * Copyright (C) 2017 Mustafa Kabaktepe
  */
 
-package com.myown.project.stage1movieapp;
+package com.myown.project.stage1movieapp.activity;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -11,6 +11,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.myown.project.stage1movieapp.R;
+import com.myown.project.stage1movieapp.model.Movie;
+import com.myown.project.stage1movieapp.util.NetworkUtils;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
@@ -53,12 +56,12 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void fillMovieDetails(Movie movie) {
-        mTitle.setText(getString(R.string.movie_title_label, movie.title));
-        mRelease.setText(getString(R.string.movie_releaseDate_label, movie.releaseDate));
-        mVote.setText(getString(R.string.movie_vote_average_label, String.valueOf(movie.voteAverage)));
-        mPlot.setText(movie.overview);
+        mTitle.setText(getString(R.string.movie_title_label, movie.getTitle()));
+        mRelease.setText(getString(R.string.movie_releaseDate_label, movie.getReleaseDate()));
+        mVote.setText(getString(R.string.movie_vote_average_label, String.valueOf(movie.getVoteAverage())));
+        mPlot.setText(movie.getOverview());
 
-        Uri uri = NetworkUtils.relativeToAbsoluteImageUrl(movie.posterRelativePath);
+        Uri uri = NetworkUtils.relativeToAbsoluteImageUrl(movie.getPosterRelativePath());
         Picasso.with(this).load(uri).resize(this.getResources().getInteger(R.integer.image_width),
                 this.getResources().getInteger(R.integer.image_height)).into(mImageView);
     }

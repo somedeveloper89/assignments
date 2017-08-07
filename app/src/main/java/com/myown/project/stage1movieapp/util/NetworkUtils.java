@@ -2,7 +2,7 @@
  * Copyright (C) 2017 Mustafa Kabaktepe
  */
 
-package com.myown.project.stage1movieapp;
+package com.myown.project.stage1movieapp.util;
 
 import android.net.Uri;
 import android.util.Log;
@@ -26,8 +26,8 @@ public class NetworkUtils {
     private static final String MOVIE_DB_BASE_URL = "https://api.themoviedb.org/3/movie/";
     private static final String API_KEY = "api_key";
     private static final String MY_API_KEY = "ADD-YOUR-API-KEY-HERE";
-    static final String POPULAR = "popular";
-    static final String RATING = "top_rated";
+    public static final String POPULAR = "popular";
+    public static final String RATING = "top_rated";
     private static final String MOVIE_DB_IMAGE_BASE_URL = "http://image.tmdb.org/t/p/";
     private static final String RECOMMENDED_IMAGE_SIZE = "w185";
     private static final String VIDEOS = "videos";

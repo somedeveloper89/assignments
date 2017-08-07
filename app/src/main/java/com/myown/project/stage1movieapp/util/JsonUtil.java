@@ -2,7 +2,9 @@
  * Copyright (C) 2017 Mustafa Kabaktepe
  */
 
-package com.myown.project.stage1movieapp;
+package com.myown.project.stage1movieapp.util;
+
+import com.myown.project.stage1movieapp.model.Movie;
 
 import org.json.JSONArray;
 import org.json.JSONException;

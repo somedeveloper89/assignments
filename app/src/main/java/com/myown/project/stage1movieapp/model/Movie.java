@@ -2,7 +2,7 @@
  * Copyright (C) 2017 Mustafa Kabaktepe
  */
 
-package com.myown.project.stage1movieapp;
+package com.myown.project.stage1movieapp.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -11,12 +11,12 @@ import android.os.Parcelable;
  * Movie class represents a movie and it's data.
  */
 public class Movie implements Parcelable {
-    int id;
-    String title;
-    String posterRelativePath;
-    String overview;
-    String releaseDate;
-    double voteAverage;
+    private int id;
+    private String title;
+    private String posterRelativePath;
+    private String overview;
+    private String releaseDate;
+    private double voteAverage;
 
     public Movie(int id, String title, String posterRelativePath, String releaseDate, double voteAverage, String overview) {
         this.id = id;
@@ -62,5 +62,65 @@ public class Movie implements Parcelable {
         dest.writeString(overview);
         dest.writeString(releaseDate);
         dest.writeDouble(voteAverage);
+    }
+
+    public int getId()
+    {
+        return id;
+    }
+
+    public void setId(int id)
+    {
+        this.id = id;
+    }
+
+    public String getTitle()
+    {
+        return title;
+    }
+
+    public void setTitle(String title)
+    {
+        this.title = title;
+    }
+
+    public String getPosterRelativePath()
+    {
+        return posterRelativePath;
+    }
+
+    public void setPosterRelativePath(String posterRelativePath)
+    {
+        this.posterRelativePath = posterRelativePath;
+    }
+
+    public String getOverview()
+    {
+        return overview;
+    }
+
+    public void setOverview(String overview)
+    {
+        this.overview = overview;
+    }
+
+    public String getReleaseDate()
+    {
+        return releaseDate;
+    }
+
+    public void setReleaseDate(String releaseDate)
+    {
+        this.releaseDate = releaseDate;
+    }
+
+    public double getVoteAverage()
+    {
+        return voteAverage;
+    }
+
+    public void setVoteAverage(double voteAverage)
+    {
+        this.voteAverage = voteAverage;
     }
 }
