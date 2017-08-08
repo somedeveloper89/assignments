@@ -15,4 +15,10 @@
     <string name="movie_releaseDate_label">Release date: %s</string>
     <string name="movie_vote_average_label">Average score: %s</string>
     <string name="movie_plot_synopsis">Plot synopsis:</string>
+
+    <string name="favorite_textview_add">Add to favorites</string>
+    <string name="favorite_textview_remove">Remove from favorites</string>
+
+    <string name="movie_added_to_favorites_list">This movie has been added to the favorites list</string>
+    <string name="movie_removed_from_favorites_list">Movie has been removed from the favorites list</string>
 </resources>

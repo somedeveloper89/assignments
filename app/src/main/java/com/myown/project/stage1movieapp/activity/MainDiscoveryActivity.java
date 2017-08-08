@@ -116,4 +116,8 @@ public class MainDiscoveryActivity extends AppCompatActivity implements FetchMov
         mMessage.setText(R.string.loading_movies_text);
         mMessage.setVisibility(View.VISIBLE);
     }
+
+    private void loadFavoriteMoviesFromDatabase() {
+        // TODO MK:
+    }
 }

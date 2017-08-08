@@ -28,6 +28,11 @@
                 android:value=".activity.MainDiscoveryActivity"/>
 
         </activity>
+
+        <provider
+            android:authorities="com.myown.project.stage1movieapp"
+            android:name=".data.MovieContentProvider"
+            android:exported="false"/>
     </application>
 
 </manifest>
