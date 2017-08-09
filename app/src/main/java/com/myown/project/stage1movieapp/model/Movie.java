@@ -18,6 +18,9 @@ public class Movie implements Parcelable {
     private String releaseDate;
     private double voteAverage;
 
+    public Movie() {
+    }
+
     public Movie(int id, String title, String posterRelativePath, String releaseDate, double voteAverage, String overview) {
         this.id = id;
         this.title = title;
@@ -64,63 +67,51 @@ public class Movie implements Parcelable {
         dest.writeDouble(voteAverage);
     }
 
-    public int getId()
-    {
+    public int getId() {
         return id;
     }
 
-    public void setId(int id)
-    {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public String getTitle()
-    {
+    public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title)
-    {
+    public void setTitle(String title) {
         this.title = title;
     }
 
-    public String getPosterRelativePath()
-    {
+    public String getPosterRelativePath() {
         return posterRelativePath;
     }
 
-    public void setPosterRelativePath(String posterRelativePath)
-    {
+    public void setPosterRelativePath(String posterRelativePath) {
         this.posterRelativePath = posterRelativePath;
     }
 
-    public String getOverview()
-    {
+    public String getOverview() {
         return overview;
     }
 
-    public void setOverview(String overview)
-    {
+    public void setOverview(String overview) {
         this.overview = overview;
     }
 
-    public String getReleaseDate()
-    {
+    public String getReleaseDate() {
         return releaseDate;
     }
 
-    public void setReleaseDate(String releaseDate)
-    {
+    public void setReleaseDate(String releaseDate) {
         this.releaseDate = releaseDate;
     }
 
-    public double getVoteAverage()
-    {
+    public double getVoteAverage() {
         return voteAverage;
     }
 
-    public void setVoteAverage(double voteAverage)
-    {
+    public void setVoteAverage(double voteAverage) {
         this.voteAverage = voteAverage;
     }
 }

@@ -7,6 +7,7 @@ package com.myown.project.stage1movieapp.task;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.myown.project.stage1movieapp.model.ListType;
 import com.myown.project.stage1movieapp.model.Movie;
 import com.myown.project.stage1movieapp.util.JsonUtil;
 import com.myown.project.stage1movieapp.util.NetworkUtils;
@@ -21,7 +22,7 @@ import java.util.List;
 /**
  * This class executes the service requests in the background and notifies it's listener about changes.
  */
-public class FetchMoviesTask extends AsyncTask<String, Void, List<Movie>> {
+public class FetchMoviesTask extends AsyncTask<ListType, Void, List<Movie>> {
     private static final String TAG = FetchMoviesTask.class.getSimpleName();
 
     private FetchMoviesListener mListener;
@@ -36,7 +37,7 @@ public class FetchMoviesTask extends AsyncTask<String, Void, List<Movie>> {
     }
 
     @Override
-    protected List<Movie> doInBackground(String... params) {
+    protected List<Movie> doInBackground(ListType... params) {
         URL requestUrl = NetworkUtils.buildMovieDBUrl(params[0]);
         try {
             JSONObject emptyJson = new JSONObject();

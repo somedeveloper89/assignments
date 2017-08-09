@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Stage1MovieApp</string>
+    <string name="app_name">Movie App</string>
 
     <!-- MainDiscoveryActivity labels -->
     <string name="loading_movies_text">Loading movies…</string>
@@ -9,6 +9,7 @@
     <!-- menu sort item labels -->
     <string name="rating_menu_item_text">Sort by rating</string>
     <string name="popular_menu_item_text">Sort by popularity</string>
+    <string name="favorites_menu_item_text">Show favorites</string>
 
     <!-- DetailActivity labels -->
     <string name="movie_title_label">Title: %s</string>

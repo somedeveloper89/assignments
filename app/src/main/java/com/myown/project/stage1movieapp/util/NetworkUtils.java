@@ -7,6 +7,8 @@ package com.myown.project.stage1movieapp.util;
 import android.net.Uri;
 import android.util.Log;
 
+import com.myown.project.stage1movieapp.model.ListType;
+
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -38,11 +40,11 @@ public class NetworkUtils {
     /**
      * Build the URL to talk to the movie database.
      *
-     * @param query String query
+     * @param listType the list type to query for.
      * @return URL object for the request.
      */
-    public static URL buildMovieDBUrl(String query) {
-        Uri uri = Uri.parse(MOVIE_DB_BASE_URL).buildUpon().appendPath(query.equals(POPULAR) ? POPULAR : RATING)
+    public static URL buildMovieDBUrl(ListType listType) {
+        Uri uri = Uri.parse(MOVIE_DB_BASE_URL).buildUpon().appendPath(listType.equals(ListType.POPULAR) ? POPULAR : RATING)
                 .appendQueryParameter(API_KEY, MY_API_KEY).build();
         return convertUriToURL(uri);
     }
