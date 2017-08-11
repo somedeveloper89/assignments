@@ -60,6 +60,7 @@ public class MainDiscoveryActivity extends AppCompatActivity implements GenericR
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maindiscovery);
+        setTitle("Overview");
         ButterKnife.bind(this);
 
         mRecyclerView.setHasFixedSize(true);

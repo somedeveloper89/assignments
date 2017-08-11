@@ -25,7 +25,7 @@ import butterknife.ButterKnife;
  * Supplies video data to the view.
  */
 public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecyclerViewAdapter.ViewHolder> {
-    private static final String YOUTUBE_URL = "http://www.youtube.com/watch?v=";
+    public static final String YOUTUBE_URL = "http://www.youtube.com/watch?v=";
     private List<Video> mVideos;
 
     /**

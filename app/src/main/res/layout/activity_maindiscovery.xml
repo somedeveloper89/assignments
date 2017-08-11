@@ -2,6 +2,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/activity_main"
+    android:background="@color/colorPrimary"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -23,6 +24,7 @@
         android:id="@+id/movies_loading_textview"
         android:visibility="invisible"
         android:textSize="@dimen/default_text_size"
+        android:textColor="@color/text"
         android:layout_gravity="center"
         android:text="@string/loading_movies_text"
         android:layout_width="wrap_content"

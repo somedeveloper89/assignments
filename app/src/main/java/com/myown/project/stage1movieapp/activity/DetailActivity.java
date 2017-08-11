@@ -8,11 +8,15 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ShareCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -50,8 +54,6 @@ public class DetailActivity extends AppCompatActivity implements GenericRequestT
 
     @BindView(R.id.detailscreen_movie_poster)
     ImageView mImageView;
-    @BindView(R.id.detailscreen_title)
-    TextView mTitle;
     @BindView(R.id.detailscreen_release_date)
     TextView mRelease;
     @BindView(R.id.detailscreen_vote_average)
@@ -71,6 +73,7 @@ public class DetailActivity extends AppCompatActivity implements GenericRequestT
     private int taskLoaderFor;
     private VideoRecyclerViewAdapter mVideoAdapter;
     private ReviewRecyclerViewAdapter mReviewAdapter;
+    private Video mFirstVideoToShare;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +101,38 @@ public class DetailActivity extends AppCompatActivity implements GenericRequestT
         mReviewsRecyclerView.setAdapter(mReviewAdapter);
 
         loadVideos();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_detail_activity, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if (item.getItemId() == R.id.action_share) {
+            if (mFirstVideoToShare != null) {
+                startActivity(shareFirstTrailer());
+            }
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private Intent shareFirstTrailer() {
+        Intent intent = ShareCompat.IntentBuilder.from(this)
+                .setType("text/plain")
+                .setText(VideoRecyclerViewAdapter.YOUTUBE_URL + mFirstVideoToShare.getKey())
+                .getIntent();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
+        }
+
+        return intent;
     }
 
     @Override
@@ -149,7 +184,7 @@ public class DetailActivity extends AppCompatActivity implements GenericRequestT
     private void fillMovieDetails() {
         updateFavoriteStatus();
 
-        mTitle.setText(getString(R.string.movie_title_label, mCurrentMovie.getTitle()));
+        setTitle(mCurrentMovie.getTitle());
         mRelease.setText(getString(R.string.movie_releaseDate_label, mCurrentMovie.getReleaseDate()));
         mVote.setText(getString(R.string.movie_vote_average_label, String.valueOf(mCurrentMovie.getVoteAverage())));
         mPlot.setText(mCurrentMovie.getOverview());
@@ -250,6 +285,7 @@ public class DetailActivity extends AppCompatActivity implements GenericRequestT
                 try {
                     List<Video> videoList = JsonUtil.getVideosListByJson(json);
                     Log.d(TAG, "number of videos available for this movie " + videoList.size());
+                    mFirstVideoToShare = videoList.get(0);
                     mVideoAdapter.addAll(videoList);
 
                     // Continue loading reviews.

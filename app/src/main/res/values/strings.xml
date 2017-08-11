@@ -16,6 +16,7 @@
     <string name="movie_releaseDate_label">Release date: %s</string>
     <string name="movie_vote_average_label">Average score: %s</string>
     <string name="movie_plot_synopsis">Plot synopsis:</string>
+    <string name="menu_share">Share</string>
 
     <string name="favorite_textview_add">Add to favorites</string>
     <string name="favorite_textview_remove">Remove from favorites</string>
