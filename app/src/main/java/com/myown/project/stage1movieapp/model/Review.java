@@ -24,35 +24,35 @@ public class Review {
         mUrl = url;
     }
 
-    public String getmId() {
+    public String getId() {
         return mId;
     }
 
-    public void setmId(String mId) {
+    public void setId(String mId) {
         this.mId = mId;
     }
 
-    public String getmAuthor() {
+    public String getAuthor() {
         return mAuthor;
     }
 
-    public void setmAuthor(String mAuthor) {
+    public void setAuthor(String mAuthor) {
         this.mAuthor = mAuthor;
     }
 
-    public String getmContent() {
+    public String getContent() {
         return mContent;
     }
 
-    public void setmContent(String mContent) {
+    public void setContent(String mContent) {
         this.mContent = mContent;
     }
 
-    public String getmUrl() {
+    public String getUrl() {
         return mUrl;
     }
 
-    public void setmUrl(String mUrl) {
+    public void setUrl(String mUrl) {
         this.mUrl = mUrl;
     }
 }

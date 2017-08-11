@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.myown.project.stage1movieapp.R;
+import com.myown.project.stage1movieapp.adapter.ReviewRecyclerViewAdapter;
 import com.myown.project.stage1movieapp.adapter.VideoRecyclerViewAdapter;
 import com.myown.project.stage1movieapp.data.MovieContract;
 import com.myown.project.stage1movieapp.model.Movie;
@@ -69,6 +70,7 @@ public class DetailActivity extends AppCompatActivity implements GenericRequestT
     private Movie mCurrentMovie;
     private int taskLoaderFor;
     private VideoRecyclerViewAdapter mVideoAdapter;
+    private ReviewRecyclerViewAdapter mReviewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +92,10 @@ public class DetailActivity extends AppCompatActivity implements GenericRequestT
         mVideoRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mVideoAdapter = new VideoRecyclerViewAdapter();
         mVideoRecyclerView.setAdapter(mVideoAdapter);
+
+        mReviewsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mReviewAdapter = new ReviewRecyclerViewAdapter();
+        mReviewsRecyclerView.setAdapter(mReviewAdapter);
 
         loadVideos();
     }
@@ -234,6 +240,7 @@ public class DetailActivity extends AppCompatActivity implements GenericRequestT
 
     @Override
     public void onPreExecute() {
+        // NOOP
     }
 
     @Override
@@ -254,6 +261,7 @@ public class DetailActivity extends AppCompatActivity implements GenericRequestT
                 try {
                     List<Review> reviewList = JsonUtil.getReviewsListByJson(json);
                     Log.d(TAG, "number of reviews available for this movie " + reviewList.size());
+                    mReviewAdapter.addAll(reviewList);
                 } catch (JSONException e) {
                     Log.e(TAG, "Exception: ", e);
                 }

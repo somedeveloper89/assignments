@@ -85,6 +85,8 @@
             android:id="@+id/show_trailers"
             android:textSize="22sp"
             android:textStyle="bold"
+            android:paddingTop="@dimen/default_padding"
+            android:paddingBottom="@dimen/default_padding"
             android:text="@string/videos_title_show"
             android:layout_gravity="center_horizontal"
             android:layout_width="match_parent"
@@ -103,6 +105,8 @@
 
         <Button
             android:id="@+id/show_reviews"
+            android:paddingTop="@dimen/default_padding"
+            android:paddingBottom="@dimen/default_padding"
             android:textSize="22sp"
             android:textStyle="bold"
             android:text="@string/reviews_title_show"

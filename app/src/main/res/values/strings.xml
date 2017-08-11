@@ -27,4 +27,7 @@
     <string name="videos_title_hide">Hide trailers</string>
     <string name="reviews_title_show">Show reviews</string>
     <string name="reviews_title_hide">Hide reviews</string>
+
+    <string name="review_author_label">Author</string>
+    <string name="review_content_label">Comment</string>
 </resources>
