@@ -27,7 +27,7 @@ public class NetworkUtils {
             = MediaType.parse("application/json; charset=utf-8");
     private static final String MOVIE_DB_BASE_URL = "https://api.themoviedb.org/3/movie/";
     private static final String API_KEY = "api_key";
-    private static final String MY_API_KEY = "adfdf732e6f9efd3a29c020e4e2e7509";
+    private static final String MY_API_KEY = "ADD-YOUR-API-KEY-HERE";
     public static final String POPULAR = "popular";
     public static final String RATING = "top_rated";
     private static final String MOVIE_DB_IMAGE_BASE_URL = "http://image.tmdb.org/t/p/";
