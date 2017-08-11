@@ -10,16 +10,28 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.myown.project.stage1movieapp.R;
+import com.myown.project.stage1movieapp.adapter.VideoRecyclerViewAdapter;
 import com.myown.project.stage1movieapp.data.MovieContract;
 import com.myown.project.stage1movieapp.model.Movie;
+import com.myown.project.stage1movieapp.model.Review;
+import com.myown.project.stage1movieapp.model.Video;
+import com.myown.project.stage1movieapp.task.GenericRequestTask;
+import com.myown.project.stage1movieapp.util.JsonUtil;
 import com.myown.project.stage1movieapp.util.NetworkUtils;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONException;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,8 +40,12 @@ import butterknife.OnClick;
 /**
  * This activity shows the details of a selected movie.
  */
-public class DetailActivity extends AppCompatActivity {
+public class DetailActivity extends AppCompatActivity implements GenericRequestTask.GenericRequestListener {
+    private static final String TAG = DetailActivity.class.getSimpleName();
+
     public static final String MOVIE_EXTRA = "MOVIE_EXTRA";
+    private static final int LOAD_VIDEOS = 1;
+    private static final int LOAD_REVIEWS = 2;
 
     @BindView(R.id.detailscreen_movie_poster)
     ImageView mImageView;
@@ -45,8 +61,14 @@ public class DetailActivity extends AppCompatActivity {
     ImageView mFavoritesImage;
     @BindView(R.id.favorite_text)
     TextView mFavoriteText;
+    @BindView(R.id.videos_recyclerview)
+    RecyclerView mVideoRecyclerView;
+    @BindView(R.id.reviews_recyclerview)
+    RecyclerView mReviewsRecyclerView;
 
     private Movie mCurrentMovie;
+    private int taskLoaderFor;
+    private VideoRecyclerViewAdapter mVideoAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +86,12 @@ public class DetailActivity extends AppCompatActivity {
             mCurrentMovie = intent.getParcelableExtra(MOVIE_EXTRA);
             fillMovieDetails();
         }
+
+        mVideoRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mVideoAdapter = new VideoRecyclerViewAdapter();
+        mVideoRecyclerView.setAdapter(mVideoAdapter);
+
+        loadVideos();
     }
 
     @Override
@@ -141,6 +169,28 @@ public class DetailActivity extends AppCompatActivity {
         mFavoritesImage.setEnabled(true);
     }
 
+    @OnClick(R.id.show_trailers)
+    void onClickShowTrailers(TextView view) {
+        if (mVideoRecyclerView.getVisibility() == View.VISIBLE) {
+            view.setText(getString(R.string.videos_title_show));
+            mVideoRecyclerView.setVisibility(View.GONE);
+        } else {
+            view.setText(getString(R.string.videos_title_hide));
+            mVideoRecyclerView.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @OnClick(R.id.show_reviews)
+    void onClickShowReviews(TextView view) {
+        if (mReviewsRecyclerView.getVisibility() == View.VISIBLE) {
+            view.setText(getString(R.string.reviews_title_show));
+            mReviewsRecyclerView.setVisibility(View.GONE);
+        } else {
+            view.setText(getString(R.string.reviews_title_hide));
+            mReviewsRecyclerView.setVisibility(View.VISIBLE);
+        }
+    }
+
     private void addMovieToFavorites() {
         ContentValues contentValues = new ContentValues();
         contentValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_ID, mCurrentMovie.getId());
@@ -167,6 +217,47 @@ public class DetailActivity extends AppCompatActivity {
 
         if (rowsDeleted == 1) {
             Toast.makeText(this, R.string.movie_removed_from_favorites_list, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void loadVideos() {
+        taskLoaderFor = LOAD_VIDEOS;
+        String url = NetworkUtils.buildUrlForMovieVideo(mCurrentMovie.getId());
+        new GenericRequestTask(this, true).execute(url);
+    }
+
+    private void loadReviews() {
+        taskLoaderFor = LOAD_REVIEWS;
+        String url = NetworkUtils.buildUrlForMovieReviews(mCurrentMovie.getId());
+        new GenericRequestTask(this, true).execute(url);
+    }
+
+    @Override
+    public void onPreExecute() {
+    }
+
+    @Override
+    public void onPostExecute(String json) {
+        if (json != null) {
+            if (taskLoaderFor == LOAD_VIDEOS) {
+                try {
+                    List<Video> videoList = JsonUtil.getVideosListByJson(json);
+                    Log.d(TAG, "number of videos available for this movie " + videoList.size());
+                    mVideoAdapter.addAll(videoList);
+
+                    // Continue loading reviews.
+                    loadReviews();
+                } catch (JSONException e) {
+                    Log.e(TAG, "Exception: ", e);
+                }
+            } else if (taskLoaderFor == LOAD_REVIEWS) {
+                try {
+                    List<Review> reviewList = JsonUtil.getReviewsListByJson(json);
+                    Log.d(TAG, "number of reviews available for this movie " + reviewList.size());
+                } catch (JSONException e) {
+                    Log.e(TAG, "Exception: ", e);
+                }
+            }
         }
     }
 }

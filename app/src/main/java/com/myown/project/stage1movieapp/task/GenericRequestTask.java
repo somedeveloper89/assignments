@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) 2017 Mustafa Kabaktepe
+ */
+
 package com.myown.project.stage1movieapp.task;
 
 import android.os.AsyncTask;
@@ -16,10 +20,18 @@ import java.net.URL;
 public class GenericRequestTask extends AsyncTask<String, Void, String> {
     private static final String TAG = GenericRequestTask.class.getSimpleName();
 
+    private boolean mUseHttpGet;
     private GenericRequestListener mListener;
 
-    public GenericRequestTask(GenericRequestListener listener) {
+    /**
+     * Initializer for the GenericRequestTask.
+     *
+     * @param listener   the listener that should be notified on changes.
+     * @param useHttpGet the HTTP request method to use, GET when true and POST when false.
+     */
+    public GenericRequestTask(GenericRequestListener listener, boolean useHttpGet) {
         mListener = listener;
+        mUseHttpGet = useHttpGet;
     }
 
     @Override
@@ -33,9 +45,9 @@ public class GenericRequestTask extends AsyncTask<String, Void, String> {
             URL url = new URL(params[0]);
             String jsonBody = params.length > 1 ? params[1] : new JSONObject().toString();
 
-            return NetworkUtils.post(url, jsonBody);
+            return NetworkUtils.doHttpRequest(url, jsonBody, mUseHttpGet);
         } catch (IOException e) {
-            Log.w(TAG, "Http request failed: " + e.getMessage());
+            Log.e(TAG, "Http request failed: ", e);
         }
         return null;
     }

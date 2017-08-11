@@ -32,11 +32,8 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecycl
 
     /**
      * Constructor for initialization.
-     *
-     * @param movies list of movies.
      */
-    public MoviesRecyclerViewAdapter(List<Movie> movies) {
-        mMovies = movies;
+    public MoviesRecyclerViewAdapter() {
     }
 
     @Override

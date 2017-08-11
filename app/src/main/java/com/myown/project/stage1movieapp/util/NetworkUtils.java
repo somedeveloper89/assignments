@@ -61,24 +61,34 @@ public class NetworkUtils {
     }
 
     /**
-     * This method returns the entire result from the HTTP response.
+     * This method does the HTTP request and returns the response.
      *
      * @param url The URL to fetch the HTTP response from.
      * @return The contents of the HTTP response.
      * @throws IOException Related to network and stream reading
      */
-    public static String post(URL url, String json) throws IOException {
+    public static String doHttpRequest(URL url, String json, boolean useHttpGet) throws IOException {
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .connectTimeout(CONNECTION_TIMEOUT_IN_SECONDS, TimeUnit.SECONDS)
                 .build();
 
-        Log.d(TAG, "Posting to: " + url.toString());
+        String method = useHttpGet ? "GET" : "POST";
+        Log.d(TAG, method + " to: " + url.toString());
 
-        RequestBody body = RequestBody.create(JSON, json);
-        Request request = new Request.Builder()
-                .url(url)
-                .post(body)
-                .build();
+        Request request;
+
+        if (useHttpGet) {
+            request = new Request.Builder()
+                    .url(url)
+                    .get()
+                    .build();
+        } else {
+            request = new Request.Builder()
+                    .url(url)
+                    .post(RequestBody.create(JSON, json))
+                    .build();
+        }
+
         Response response = okHttpClient.newCall(request).execute();
         return response.body().string();
     }
@@ -95,14 +105,14 @@ public class NetworkUtils {
     }
 
     /**
-     * Build the URL to get the video's for a movie.
+     * Build the URL to get the videos for a movie.
      *
      * @param movieId the unique id of the movie.
      * @return String url for the request.
      */
     public static String buildUrlForMovieVideo(int movieId) {
         Uri uri = Uri.parse(MOVIE_DB_BASE_URL).buildUpon().appendPath(String.valueOf(movieId))
-                .appendPath(VIDEOS).build();
+                .appendPath(VIDEOS).appendQueryParameter(API_KEY, MY_API_KEY).build();
         return convertUriToURL(uri).toString();
     }
 
@@ -114,7 +124,7 @@ public class NetworkUtils {
      */
     public static String buildUrlForMovieReviews(int movieId) {
         Uri uri = Uri.parse(MOVIE_DB_BASE_URL).buildUpon().appendPath(String.valueOf(movieId))
-                .appendPath(REVIEWS).build();
+                .appendPath(REVIEWS).appendQueryParameter(API_KEY, MY_API_KEY).build();
         return convertUriToURL(uri).toString();
     }
 }

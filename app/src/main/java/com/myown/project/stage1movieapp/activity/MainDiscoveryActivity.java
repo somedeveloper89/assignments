@@ -64,7 +64,7 @@ public class MainDiscoveryActivity extends AppCompatActivity implements GenericR
 
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-        mMoviesAdapter = new MoviesRecyclerViewAdapter(null);
+        mMoviesAdapter = new MoviesRecyclerViewAdapter();
         mRecyclerView.setAdapter(mMoviesAdapter);
 
         mCurrentListType = ListType.POPULAR;
@@ -138,7 +138,7 @@ public class MainDiscoveryActivity extends AppCompatActivity implements GenericR
 
     private void loadMoviesDataByAsyncTask() {
         String url = NetworkUtils.buildMovieDBUrl(mCurrentListType);
-        new GenericRequestTask(this).execute(url);
+        new GenericRequestTask(this, false).execute(url);
     }
 
     public void loadMovies(List<Movie> movies) {
@@ -201,7 +201,7 @@ public class MainDiscoveryActivity extends AppCompatActivity implements GenericR
                             null,
                             null);
                 } catch (Exception e) {
-                    Log.e(TAG, "Failed to load the favorites data. " + e.getMessage());
+                    Log.e(TAG, "Failed to load the favorites data: ", e);
                     return null;
                 }
             }
@@ -259,10 +259,10 @@ public class MainDiscoveryActivity extends AppCompatActivity implements GenericR
     public void onPostExecute(String json) {
         if (json != null) {
             try {
-                List<Movie> movies = JsonUtil.getMoviesListByJsonData(json);
+                List<Movie> movies = JsonUtil.getMoviesListByJson(json);
                 loadMovies(movies);
             } catch (JSONException e) {
-                e.printStackTrace();
+                Log.e(TAG, "Exception: ", e);
             }
         }
     }
