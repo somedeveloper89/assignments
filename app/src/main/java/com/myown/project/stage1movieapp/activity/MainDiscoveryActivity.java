@@ -25,7 +25,11 @@ import com.myown.project.stage1movieapp.adapter.MoviesRecyclerViewAdapter;
 import com.myown.project.stage1movieapp.data.MovieContract;
 import com.myown.project.stage1movieapp.model.ListType;
 import com.myown.project.stage1movieapp.model.Movie;
-import com.myown.project.stage1movieapp.task.FetchMoviesTask;
+import com.myown.project.stage1movieapp.task.GenericRequestTask;
+import com.myown.project.stage1movieapp.util.JsonUtil;
+import com.myown.project.stage1movieapp.util.NetworkUtils;
+
+import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +40,7 @@ import butterknife.ButterKnife;
 /**
  * This activity shows a grid view with movies and gives the user the ability to order by popularity or rating.
  */
-public class MainDiscoveryActivity extends AppCompatActivity implements FetchMoviesTask.FetchMoviesListener, LoaderManager.LoaderCallbacks<Cursor> {
+public class MainDiscoveryActivity extends AppCompatActivity implements GenericRequestTask.GenericRequestListener, LoaderManager.LoaderCallbacks<Cursor> {
     private static final String TAG = MainDiscoveryActivity.class.getSimpleName();
 
     private static final int MOVIE_LOADER_ID = 0;
@@ -133,10 +137,10 @@ public class MainDiscoveryActivity extends AppCompatActivity implements FetchMov
     }
 
     private void loadMoviesDataByAsyncTask() {
-        new FetchMoviesTask(this).execute(mCurrentListType);
+        String url = NetworkUtils.buildMovieDBUrl(mCurrentListType);
+        new GenericRequestTask(this).execute(url);
     }
 
-    @Override
     public void loadMovies(List<Movie> movies) {
         mProgressBar.setVisibility(View.GONE);
 
@@ -153,7 +157,6 @@ public class MainDiscoveryActivity extends AppCompatActivity implements FetchMov
         }
     }
 
-    @Override
     public void clearMovies() {
         mRecyclerView.setVisibility(View.GONE);
         mProgressBar.setVisibility(View.VISIBLE);
@@ -167,8 +170,8 @@ public class MainDiscoveryActivity extends AppCompatActivity implements FetchMov
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
+    protected void onDestroy() {
+        super.onDestroy();
         getSupportLoaderManager().destroyLoader(MOVIE_LOADER_ID);
     }
 
@@ -187,11 +190,6 @@ public class MainDiscoveryActivity extends AppCompatActivity implements FetchMov
             protected void onStartLoading() {
                 clearMovies();
                 forceLoad();
-//                if (mCursor != null) {
-//                    deliverResult(mCursor);
-//                } else {
-//                    forceLoad();
-//                }
             }
 
             @Override
@@ -250,5 +248,22 @@ public class MainDiscoveryActivity extends AppCompatActivity implements FetchMov
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         // NOOP
+    }
+
+    @Override
+    public void onPreExecute() {
+        clearMovies();
+    }
+
+    @Override
+    public void onPostExecute(String json) {
+        if (json != null) {
+            try {
+                List<Movie> movies = JsonUtil.getMoviesListByJsonData(json);
+                loadMovies(movies);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
