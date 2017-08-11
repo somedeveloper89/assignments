@@ -27,7 +27,7 @@ public class NetworkUtils {
             = MediaType.parse("application/json; charset=utf-8");
     private static final String MOVIE_DB_BASE_URL = "https://api.themoviedb.org/3/movie/";
     private static final String API_KEY = "api_key";
-    private static final String MY_API_KEY = "ADD-YOUR-API-KEY-HERE";
+    private static final String MY_API_KEY = "adfdf732e6f9efd3a29c020e4e2e7509";
     public static final String POPULAR = "popular";
     public static final String RATING = "top_rated";
     private static final String MOVIE_DB_IMAGE_BASE_URL = "http://image.tmdb.org/t/p/";
@@ -41,12 +41,12 @@ public class NetworkUtils {
      * Build the URL to talk to the movie database.
      *
      * @param listType the list type to query for.
-     * @return URL object for the request.
+     * @return String url for the request.
      */
-    public static URL buildMovieDBUrl(ListType listType) {
+    public static String buildMovieDBUrl(ListType listType) {
         Uri uri = Uri.parse(MOVIE_DB_BASE_URL).buildUpon().appendPath(listType.equals(ListType.POPULAR) ? POPULAR : RATING)
                 .appendQueryParameter(API_KEY, MY_API_KEY).build();
-        return convertUriToURL(uri);
+        return convertUriToURL(uri).toString();
     }
 
     private static URL convertUriToURL(Uri uri) {
@@ -98,23 +98,23 @@ public class NetworkUtils {
      * Build the URL to get the video's for a movie.
      *
      * @param movieId the unique id of the movie.
-     * @return URL object for the request.
+     * @return String url for the request.
      */
-    public static URL buildUrlForMovieVideo(int movieId) {
+    public static String buildUrlForMovieVideo(int movieId) {
         Uri uri = Uri.parse(MOVIE_DB_BASE_URL).buildUpon().appendPath(String.valueOf(movieId))
                 .appendPath(VIDEOS).build();
-        return convertUriToURL(uri);
+        return convertUriToURL(uri).toString();
     }
 
     /**
      * Build the URL to get the reviews for a movie.
      *
      * @param movieId the unique id of the movie.
-     * @return URL object for the request.
+     * @return String url for the request.
      */
-    public static URL buildUrlForMovieReviews(int movieId) {
+    public static String buildUrlForMovieReviews(int movieId) {
         Uri uri = Uri.parse(MOVIE_DB_BASE_URL).buildUpon().appendPath(String.valueOf(movieId))
                 .appendPath(REVIEWS).build();
-        return convertUriToURL(uri);
+        return convertUriToURL(uri).toString();
     }
 }

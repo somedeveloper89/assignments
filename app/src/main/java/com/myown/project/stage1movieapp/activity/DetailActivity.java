@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
@@ -62,21 +61,27 @@ public class DetailActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
         if (intent.hasExtra(MOVIE_EXTRA)) {
-
             mCurrentMovie = intent.getParcelableExtra(MOVIE_EXTRA);
             fillMovieDetails();
-        } else if (savedInstanceState != null) {
+        }
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        if (savedInstanceState != null) {
             mCurrentMovie = savedInstanceState.getParcelable(MOVIE_EXTRA);
             fillMovieDetails();
         }
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+    protected void onSaveInstanceState(Bundle outState) {
         if (mCurrentMovie != null) {
             outState.putParcelable(MOVIE_EXTRA, mCurrentMovie);
         }
-        super.onSaveInstanceState(outState, outPersistentState);
+        super.onSaveInstanceState(outState);
     }
 
     private boolean isMovieFavorite() {
@@ -95,6 +100,7 @@ public class DetailActivity extends AppCompatActivity {
                 // We have a match, which means this movie is in the favorites list.
                 return true;
             }
+            cursor.close();
         }
 
         return false;
